@@ -41,100 +41,54 @@ Welcome to the NestJS E-commerce API, a backend application built with NestJS, P
   ```bash
   npm install -g prisma
 
-
-Certainly! Below is a template for a README file for your NestJS-based E-commerce API. Feel free to customize it based on your specific details, project structure, and additional features:
-
-markdown
-Copy code
-# NestJS E-commerce API
-
-Welcome to the NestJS E-commerce API, a backend application built with NestJS, Prisma, and PostgreSQL to provide a foundation for an E-commerce platform.
-
-## Features
-
-- **User Authentication:**
-  - Secure user authentication with bcrypt for password hashing.
-  - Passport local and JWT strategies for handling authentication.
-
-- **Database Integration:**
-  - Prisma as the ORM for interacting with PostgreSQL database.
-  - Models and migrations for handling user data, products, orders, and more.
-
-- **Authorization and Guards:**
-  - Role-based access control using NestJS guards.
-  - Authorization checks for protected routes.
-
-- **Product Management:**
-  - CRUD operations for managing products.
-  - Product categories and attributes.
-
-- **User Management:**
-  - Registration, login, and profile management.
-  - User roles and permissions.
-
-- **Order Processing:**
-  - Create, view, and manage orders.
-  - Order status updates.
-
-- **Security:**
-  - Input validation using NestJS pipes.
-  - Protection against common security vulnerabilities.
-
-## Prerequisites
-
-- Node.js and npm installed.
-- PostgreSQL database server.
-- Prisma CLI installed globally:
-
-  ```bash
-  npm install -g prisma
-Getting Started
-Clone the Repository:
+**Getting Started**
+1.Clone the Repository:
 
   bash
   Copy code
   git clone https://github.com/yourusername/nest-ecommerce-api.git
   cd nest-ecommerce-api
-  Install Dependencies:
+2. Install Dependencies:
 
   bash
   Copy code
   npm install
-  Set Up Environment Variables:
+
+3.Set Up Environment Variables:
   
   Create a .env file based on .env.example and update the values.
   
-  Database Migration:
+4.Database Migration:
 
-Run Prisma migrations to initialize the database schema:
+ Run Prisma migrations to initialize the database schema:
 
   bash
   Copy code
   npx prisma migrate dev
-  Run the Application:
 
-bash
-Copy code
-npm run start
-The API will be accessible at http://localhost:3000.
+5.Run the Application:
+  
+  bash
+  Copy code
+  npm run start
+  The API will be accessible at http://localhost:3000.
 
-Usage
-Explore the provided API endpoints using tools like Postman or curl.
-Refer to the Swagger/OpenAPI documentation at /api for detailed information about available routes.
-Testing
-Run tests using:
+**Usage**
+  Explore the provided API endpoints using tools like Postman or curl.
+  Refer to the Swagger/OpenAPI documentation at /api for detailed information about available routes.
+  Testing
 
-bash
-Copy code
-npm run test
+6. Run tests using:
+  
+  bash
+  Copy code
+  npm run test
 Contributing
 If you'd like to contribute to the project, please follow our Contribution Guidelines.
 
-License
-This project is licensed under the MIT License.
 
 Contact
-For any inquiries or issues, please contact Your Name.
+For any inquiries or issues, please contact afolabiwale262@gmail.com.
 
 Happy coding!
 
