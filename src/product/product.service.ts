@@ -1,15 +1,15 @@
 import { Injectable } from '@nestjs/common';
-import { Model } from 'mongoose';
-import { InjectModel } from '@nestjs/mongoose';
-import { Product, ProductDocument } from './schemas/product.schema';
+import { Product } from 'prisma/schema.prisma';
 import { CreateProductDTO } from './dtos/create-product.dto';
 import { FilterProductDTO } from './dtos/filter-product.dto';
+import { PrismaService } from 'prisma/prisma.service';
+
 
 @Injectable()
 export class ProductService {
-  constructor(@InjectModel('Product') private readonly productModel: Model<ProductDocument>) { }
-
-  async getFilteredProducts(filterProductDTO: FilterProductDTO): Promise<Product[]> {
+  constructor(private prisma: PrismaService) { }
+  
+  async getFilteredProducts(filterProductDTO: FilterProductDTO) {
     const { category, search } = filterProductDTO;
     let products = await this.getAllProducts();
 
@@ -21,35 +21,51 @@ export class ProductService {
     }
 
     if (category) {
-      products = products.filter(product => product.category === category)
+      products = products.filter(product => product.category === category);
     }
-
     return products;
   }
 
-  async getAllProducts(): Promise<Product[]> {
-    const products = await this.productModel.find().exec();
+  async getAllProducts() {
+    const products = await this.prisma.product.findMany();
     return products;
   }
-
-  async getProduct(id: string): Promise<Product> {
-    const product = await this.productModel.findById(id).exec();
+ 
+  async getProduct(id: string) {
+    const product = await this.prisma.product.findUnique({
+      where: { id: id },
+    });
+    
     return product;
   }
 
-  async addProduct(createProductDTO: CreateProductDTO): Promise<Product> {
-    const newProduct = await this.productModel.create(createProductDTO);
-    return newProduct.save();
+  async addProduct(createProductDTO: CreateProductDTO) {
+    const newProduct = await this.prisma.product.create({
+      data: createProductDTO,
+    });
+
+    return newProduct;
   }
 
-  async updateProduct(id: string, createProductDTO: CreateProductDTO): Promise<Product> {
-    const updatedProduct = await this.productModel
-      .findByIdAndUpdate(id, createProductDTO, { new: true });
+
+  async updateProduct(id: string, createProductDTO: CreateProductDTO) {
+    const updatedProduct = await this.prisma.product.update({
+      where: { id: id },
+      data: createProductDTO,
+    });
+
     return updatedProduct;
   }
 
-  async deleteProduct(id: string): Promise<any> {
-    const deletedProduct = await this.productModel.findByIdAndDelete(id);
+
+  async deleteProduct(id: string){
+    const deletedProduct = await this.prisma.product.delete({
+      where: { id: id },
+    });
+
     return deletedProduct;
   }
 }
+
+
+

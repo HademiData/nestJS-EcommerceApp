@@ -22,7 +22,7 @@ export class ProductController {
   @Get('/:id')
   async getProduct(@Param('id') id: string) {
     const product = await this.productService.getProduct(id);
-    if (!product) throw new NotFoundException('Product does not exist!');
+    if (!product) throw new NotFoundException('Product does not Exist!');
     return product;
   }
 

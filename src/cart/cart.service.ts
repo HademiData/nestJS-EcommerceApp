@@ -1,15 +1,15 @@
 import { Injectable } from '@nestjs/common';
-import { Model } from 'mongoose';
-import { InjectModel } from '@nestjs/mongoose';
-import { Cart, CartDocument } from './schemas/cart.schema';
 import { ItemDTO } from './dtos/item.dto';
+import { Cart } from 'prisma/schema.prisma';
+import { PrismaService } from 'prisma/prisma.service';
 
 @Injectable()
 export class CartService {
-  constructor(@InjectModel('Cart') private readonly cartModel: Model<CartDocument>) { }
+  constructor( private prisma: PrismaService) { }
 
-  async createCart(userId: string, itemDTO: ItemDTO, subTotalPrice: number, totalPrice: number): Promise<Cart> {
-    const newCart = await this.cartModel.create({
+
+  async createCart(userId: string, itemDTO: ItemDTO, subTotalPrice: number, totalPrice: number) {
+    const newCart = await this.prisma.cart.create({
       userId,
       items: [{ ...itemDTO, subTotalPrice }],
       totalPrice
@@ -17,44 +17,64 @@ export class CartService {
     return newCart;
   }
 
-  async getCart(userId: string): Promise<CartDocument> {
-    const cart = await this.cartModel.findOne({ userId });
+  async getCart(userId:string) {
+    const cart = await this.prisma.cart.findUnique({
+      where: { userId },
+    });
+
     return cart;
   }
 
-  async deleteCart(userId: string): Promise<Cart> {
-    const deletedCart = await this.cartModel.findOneAndDelete({ userId:userId });
+  async deleteCart(userId: string) {
+    const deletedCart = await this.prisma.cart.delete({
+      where: { userId },
+    });
+
     return deletedCart;
   }
-
-  private recalculateCart(cart: CartDocument) {
+  
+  private recalculateCart(cart: Cart) {
     cart.totalPrice = 0;
     cart.items.forEach(item => {
-      cart.totalPrice += (item.quantity * item.price);
-    })
+      cart.totalPrice += item.quantity * item.price;
+    });
   }
 
-  async addItemToCart(userId: string, itemDTO: ItemDTO): Promise<Cart> {
+
+  async addItemToCart(userId: string, itemDTO: ItemDTO){
     const { productId, quantity, price } = itemDTO;
     const subTotalPrice = quantity * price;
 
     const cart = await this.getCart(userId);
 
     if (cart) {
-      const itemIndex = cart.items.findIndex((item) => item.productId == productId);
+      const itemIndex = cart.items.findIndex((item) => item.productId === productId);
 
       if (itemIndex > -1) {
         let item = cart.items[itemIndex];
-        item.quantity = Number(item.quantity) + Number(quantity);
+        item.quantity += quantity;
         item.subTotalPrice = item.quantity * item.price;
 
         cart.items[itemIndex] = item;
         this.recalculateCart(cart);
-        return cart.save();
+
+        return this.prisma.cart.update({
+          where: { userId },
+          data: cart,
+        });
       } else {
-        cart.items.push({ ...itemDTO, subTotalPrice });
-        this.recalculateCart(cart);
-        return cart.save();
+        const updatedCart = await this.prisma.cart.update({
+          where: { userId },
+          data: {
+            items: {
+              create: [{ ...itemDTO, subTotalPrice }],
+            },
+          },
+        });
+
+        this.recalculateCart(updatedCart);
+
+        return updatedCart;
       }
     } else {
       const newCart = await this.createCart(userId, itemDTO, subTotalPrice, price);
@@ -62,14 +82,26 @@ export class CartService {
     }
   }
 
-  async removeItemFromCart(userId: string, productId: string): Promise<any> {
+
+
+  async removeItemFromCart(userId: string, productId: string){
+    
     const cart = await this.getCart(userId);
 
-    const itemIndex = cart.items.findIndex((item) => item.productId == productId);
+    if (cart) {
+      const itemIndex = cart.items.findIndex((item) => item.productId === productId);
 
-    if (itemIndex > -1) {
-      cart.items.splice(itemIndex, 1);
-      return cart.save();
-    }
+      if (itemIndex > -1) {
+        cart.items.splice(itemIndex, 1);
+        this.recalculateCart(cart);
+
+        return this.prisma.cart.update({
+          where: { userId },
+          data: cart,
+        });
+        }
+    }else{
+        return 'Cart not found';
+      }
   }
 }
