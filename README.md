@@ -5,11 +5,11 @@ Welcome to the NestJS E-commerce API, a backend application built with NestJS, P
 ## Features
 
 - **User Authentication:**
-  - Secure user authentication with bcrypt for password hashing.
+  - Secured user authentication with bcrypt for password hashing.
   - Passport local and JWT strategies for handling authentication.
 
 - **Database Integration:**
-  - Prisma as the ORM for interacting with PostgreSQL database.
+  - Prisma as the ORM for interacting with the PostgreSQL database.
   - Models and migrations for handling user data, products, orders, and more.
 
 - **Authorization and Guards:**
