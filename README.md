@@ -18,7 +18,7 @@ Welcome to the NestJS E-commerce API, a backend application built with NestJS, P
 
 - **Product Management:**
   - CRUD operations for managing products.
-  - Product categories and attributes.
+  - Product categories and attributes.  
 
 - **User Management:**
   - Registration, login, and profile management.
