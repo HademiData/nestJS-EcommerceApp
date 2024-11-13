@@ -1,8 +1,8 @@
 # NestJS E-commerce API
-
 Welcome to the NestJS E-commerce API, a backend application built with NestJS, Prisma, and PostgreSQL to provide a foundation for an E-commerce platform.
 
-## Features
+
+# Features
 
 - **User Authentication:**
   - Secured user authentication with bcrypt for password hashing.
