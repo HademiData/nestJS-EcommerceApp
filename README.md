@@ -15,7 +15,6 @@ Welcome to the NestJS E-commerce API, a backend application built with NestJS, P
 - **Authorization and Guards:**
   - Role-based access control using NestJS guards.
   - Authorization checks for protected routes.
-
 - **Product Management:**
   - CRUD operations for managing products.
   - Product categories and attributes.  
@@ -61,7 +60,6 @@ Welcome to the NestJS E-commerce API, a backend application built with NestJS, P
 4.Database Migration:
 
  Run Prisma migrations to initialize the database schema:
-
   bash
   Copy code
   npx prisma migrate dev
