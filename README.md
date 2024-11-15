@@ -73,7 +73,7 @@ Welcome to the NestJS E-commerce API, a backend application built with NestJS, P
 
 **Usage**
   Explore the provided API endpoints using tools like Postman or curl.
-  Refer to the Swagger/OpenAPI documentation at /api for detailed information about available routes.
+  Refer to the Swagger/OpenAPI documentation at /Api for detailed information about available routes.
   Testing
 
 6. Run tests using:
